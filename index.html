@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <table style="width: 200px">
+                        <tbody id="reqs"></tbody>
+                    </table>
+                </td>
+                <td>
+                    <form>
+                        <table style="width: 200px">
+
+                            <body>
+                                <tr>
+                                    <td>
+                                        <div>Метод</div>
+                                        <select style="width: 100px">
+                                            <option value="GET">GET</option>
+                                            <option value="POST">POST</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div>URL</div>
+                                        <input style="width: 200px" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Тело запроса</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <textarea style="width: 380px"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Заголовки</td>
+                                </tr>
+                                <tr id="headers"></tr>
+                                <td>
+                                    <input type="button" value="Добавить заголовок"></input>
+                                </td>
+                            </body>
+                        </table>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
+
+<script type="text/javascript" src="script.js"></script>
