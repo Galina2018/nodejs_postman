@@ -1,0 +1,35 @@
+.container {
+    margin: 15px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    padding: 0 7px;
+}
+
+.column5 {
+    flex: 5
+}
+
+.ta-left {
+    text-align: left
+}
+
+.w100 {
+    width: 100%;
+    margin: 2px 0;
+}
+
+.mt16 {
+    margin-top: 16px;
+}

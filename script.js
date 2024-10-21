@@ -1,7 +1,9 @@
 getReqs();
+
 function test() {
-    console.log('in test')
+  console.log('in test');
 }
+
 function getReqs() {
   const reqsArr = [
     {
@@ -21,7 +23,7 @@ function getReqs() {
       url: 'http1',
       headers: [
         {
-          type: 'Accpept',
+          type: 'Accept',
           value: '*/*',
         },
       ],
@@ -43,8 +45,7 @@ function getReqs() {
   let headers = document.getElementById('headers');
   reqsArr.forEach((e) => {
     if (e.id) {
-      reqs.innerHTML += `<td><button onclick="test()" style="text-align:left">Метод: ${e.method}<br /></div>${e.url}</button></td>`;
+      reqs.innerHTML += `<div><button onclick="test()" class="ta-left w100">Метод: ${e.method}<br />${e.url}</button></div>`;
     }
   });
-  
 }

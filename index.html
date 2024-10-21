@@ -6,57 +6,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
-    <table>
-        <tbody>
-            <tr>
-                <td>
-                    <table style="width: 200px">
-                        <tbody id="reqs"></tbody>
-                    </table>
-                </td>
-                <td>
-                    <form>
-                        <table style="width: 200px">
+    <div class="container">
+        <div class='row'>
+            <div class='column'>
+                <div id="reqs" class="mt16"></div>
+            </div>
+            <div class='column'>
+                <form>
+                    <div class='row'>
+                        <div class='column'>
+                            <div>Метод</div>
+                            <select>
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                            </select>
+                        </div>
+                        <div class='column column5'>
+                            <div>URL</div>
+                            <input />
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='column'>
+                            <div>Тело запроса</div>
+                            <textarea></textarea>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='column'>
+                            <div>Заголовки</div>
+                            <div id="headers"></div>
+                            <input type="button" value="Добавить заголовок"></input>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-                            <body>
-                                <tr>
-                                    <td>
-                                        <div>Метод</div>
-                                        <select style="width: 100px">
-                                            <option value="GET">GET</option>
-                                            <option value="POST">POST</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div>URL</div>
-                                        <input style="width: 200px" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Тело запроса</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <textarea style="width: 380px"></textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Заголовки</td>
-                                </tr>
-                                <tr id="headers"></tr>
-                                <td>
-                                    <input type="button" value="Добавить заголовок"></input>
-                                </td>
-                            </body>
-                        </table>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+    </div>
 </body>
 
 </html>
