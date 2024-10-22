@@ -48,4 +48,12 @@ function getReqs() {
       reqs.innerHTML += `<div><button onclick="test()" class="ta-left w100">Метод: ${e.method}<br />${e.url}</button></div>`;
     }
   });
+
+  const form = document.getElementById('form');
+  form.addEventListener('submit', sendRequest);
+  async function sendRequest() {
+    await fetch('/sendReq', {
+      method: post,
+    });
+  }
 }
