@@ -1,0 +1,35 @@
+[
+  {
+    "id": 0,
+    "method": "",
+    "url": "",
+    "headers": [
+      {
+        "type": "",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "method": "GET",
+    "url": "http://fe.it-academy.by/images/logo3.png",
+    "headers": [
+      {
+        "type": "Accept",
+        "value": "*/*"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "method": "POST",
+    "url": "https://www.sber-bank.by/",
+    "headers": [
+      {
+        "type": "Content-type",
+        "value": "text/html"
+      }
+    ]
+  }
+]
