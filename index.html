@@ -13,27 +13,28 @@
     <div class="container">
         <div class='row'>
             <div class='column'>
+                <button onclick="getReqs()">Получить запросы</button>
                 <div id="reqs" class="mt16"></div>
             </div>
             <div class='column'>
-                <form id="form">
+                <form id="form" method=post action="/sendReq">
                     <div class='row'>
                         <div class='column'>
                             <div>Метод</div>
-                            <select>
+                            <select name="method">
                                 <option value="GET">GET</option>
                                 <option value="POST">POST</option>
                             </select>
                         </div>
                         <div class='column column5'>
                             <div>URL</div>
-                            <input />
+                            <input name="url" type="text" />
                         </div>
                     </div>
                     <div class='row'>
                         <div class='column'>
                             <div>Тело запроса</div>
-                            <textarea></textarea>
+                            <textarea name="bodyReq"></textarea>
                         </div>
                     </div>
                     <div class='row'>
