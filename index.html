@@ -13,28 +13,27 @@
     <div class="container">
         <div class='row'>
             <div class='column'>
-                <button onclick="getReqs()">Получить запросы</button>
-                <div id="reqs" class="mt16"></div>
+                <div id="reqs">Методы</div>
             </div>
             <div class='column'>
-                <form id="form" method=post action="/sendReq">
+                <form id="form" method="GET">
                     <div class='row'>
                         <div class='column'>
                             <div>Метод</div>
-                            <select name="method">
+                            <select name="method" id="select">
                                 <option value="GET">GET</option>
                                 <option value="POST">POST</option>
                             </select>
                         </div>
                         <div class='column column5'>
                             <div>URL</div>
-                            <input name="url" type="text" />
+                            <input id="url" name="url" type="text" />
                         </div>
                     </div>
                     <div class='row'>
                         <div class='column'>
                             <div>Тело запроса</div>
-                            <textarea name="bodyReq"></textarea>
+                            <textarea id="bodyReq" name="bodyReq"></textarea>
                         </div>
                     </div>
                     <div class='row'>
@@ -44,16 +43,28 @@
                             <input type="button" value="Добавить заголовок"></input>
                         </div>
                     </div>
-                    <div class='row mt16 ml8'>
-                        <button type="submit">Сохранить запрос</button>
-                        <button type="submit">Отправить запрос</button>
-                        <button type="submit">Очистить форму</button>
+                    <div class='column'>
+                        <div class='row mt12'>
+                            <div class='column4'>
+                                <input type=button value="Сохранить запрос"
+                                    onclick="form.method='POST'; form.submit();">
+                            </div>
+                            <div class='column4'>
+                                <input type=button value="Отправить запрос"
+                                    onclick="sendRequest(form)">
+                            </div>
+                            <div class='column4'>
+                                <input type=button value="Очистить форму" onclick="form.reset()">
+                            </div>
+                        </div>
+                        <div class='row mt12 response'>
+
+                        </div>
                     </div>
-                </form>
             </div>
+            </form>
         </div>
-
-
+    </div>
     </div>
 </body>
 
