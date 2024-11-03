@@ -1,0 +1,18 @@
+{
+  "id": 106,
+  "category": {
+    "id": 5,
+    "name": "Lions"
+  },
+  "name": "Leo",
+  "photoUrls": [
+    "https://example.com/lion1.jpg"
+  ],
+  "tags": [
+    {
+      "id": 6,
+      "name": "wild"
+    }
+  ],
+  "status": "sold"
+}
