@@ -19,9 +19,19 @@
 
 .column4 {
   flex: 4;
+  padding: 0 7px;
 }
 .column5 {
   flex: 5;
+  padding: 0 7px;
+}
+.column6 {
+  flex: 6;
+  padding: 0 7px;
+}
+.column8 {
+  flex: 8;
+  padding: 0 7px;
 }
 
 .ta-left {
@@ -39,8 +49,11 @@
 .mt12 {
   margin-top: 12px;
 }
+.mb12 {
+  margin-bottom: 12px;
+}
 
 .response {
   min-height: 100px;
-  border: solid gray 1px
+  border: solid gray 1px;
 }
