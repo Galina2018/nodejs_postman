@@ -2,7 +2,9 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
-const { randomUUID } = require('crypto');
+const fetch = require('node-fetch');
+const bodyParser = require('body-parser');
+const http = require('http');
 
 const webserver = express();
 const upload = multer();
@@ -11,6 +13,8 @@ const port = 7380;
 
 webserver.use(express.urlencoded({ extended: true }));
 webserver.use(express.static(path.resolve(__dirname, 'public')));
+webserver.use(bodyParser.text({}));
+// webserver.use(bodyParser.json({}));
 
 webserver.get('/', (req, res) => {
   const html = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf8');
@@ -30,9 +34,12 @@ webserver.post('/', upload.none(), (req, res) => {
     path.resolve(__dirname, './public', 'reqs.json'),
     'utf8'
   );
+  console.log('dataJson', dataJson);
   let data = JSON.parse(dataJson);
   if (req.body && req.body.method && req.body.url) {
-    req.body.id = randomUUID();
+    req.body.id = Math.random();
+    req.body.bodyReq = JSON.parse(req.body.bodyReq);
+
     data.push(req.body);
   }
   fs.writeFileSync(
@@ -44,17 +51,34 @@ webserver.post('/', upload.none(), (req, res) => {
 });
 
 webserver.post('/sendReq', async (req, res) => {
-  const body = req.body;
-  const response = await fetch(`${body.url}`, {
-    method: `${body.method}`,
+  const body = JSON.parse(req.body);
+  const response = await fetch(body.url, {
+    method: body.method,
+  });
+  const resBody = await response.json();
+  const resHeaders = new Map();
+  for (const header of response.headers) {
+    resHeaders.set(header[0], header[1]);
+  }
+  // res.send({
+  //   status: response.status,
+  //   headers: resHeaders,
+  //   body: resBody,
+  // });
+  console.log(111);
+  let result = '';
+  res.on('data', (chunk) => {
+    console.log(333);
+    result += chunk; // chunk - это Buffer, но при склейке со строкой он автоматом преобразуется к строке
   });
 
-  // fs.writeFileSync(resultFN, result);
-
+  res.on('end', () => {
+    // всё загружено
+    console.log('loaded:', JSON.parse(result));
+  });
+  console.log(222);
   res.send({
-    status: response.status,
-    headers:  response.headers,
-    body: await response.text(),
+    body: resBody,
   });
 });
 
