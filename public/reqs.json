@@ -20,7 +20,7 @@
         "value": "*/*"
       },
       {
-        "type": "Content-type",
+        "type": "Content-Type",
         "value": "application/json"
       }
     ]
@@ -31,7 +31,7 @@
     "url": "https://www.sber-bank.by/",
     "headers": [
       {
-        "type": "Content-type",
+        "type": "Content-Type",
         "value": "application/json"
       }
     ],
@@ -49,9 +49,7 @@
         "name": "dogs"
       },
       "name": "Tafi",
-      "photoUrls": [
-        "https://images.pexels.com/photos/3512/garden-dog-pet.jpg"
-      ],
+      "photoUrls": ["https://images.pexels.com/photos/3512/garden-dog-pet.jpg"],
       "tags": [
         {
           "id": 0,
