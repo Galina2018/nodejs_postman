@@ -1,20 +1,32 @@
 const express = require('express');
+const {  engine } = require('express-handlebars');
 const path = require('path');
 const fs = require('fs');
+const fsp = require('fs').promises;
 const multer = require('multer');
 const { randomUUID } = require('crypto');
 
 const webserver = express();
+
+webserver.engine('handlebars', engine());
+webserver.set('view engine', 'handlebars');
+webserver.set('views', path.join(__dirname, 'views'));
+
 const upload = multer();
 const port = 7380;
-// const resultFN = path.resolve(__dirname, 'result.json', 'utf8');
 
 webserver.use(express.urlencoded({ extended: true }));
 webserver.use(express.static(path.resolve(__dirname, 'public')));
 
-webserver.get('/', (req, res) => {
-  const html = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf8');
-  res.send(html);
+webserver.get('/', async (req, res) => {
+  const reqs = await fsp.readFile(
+    path.resolve(__dirname, './public', 'reqs.json'),
+    'utf8'
+  );
+  res.render('requests', {
+    layout: 'base_layout',
+    requests: JSON.parse(reqs),
+  });
 });
 
 webserver.post('/getReqs', (req, res) => {
@@ -49,11 +61,9 @@ webserver.post('/sendReq', async (req, res) => {
     method: `${body.method}`,
   });
 
-  // fs.writeFileSync(resultFN, result);
-
   res.send({
     status: response.status,
-    headers:  response.headers,
+    headers: response.headers,
     body: await response.text(),
   });
 });

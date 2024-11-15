@@ -27,7 +27,7 @@
   },
   {
     "id": 2,
-    "method": "POST",
+    "method": "GET",
     "url": "https://www.sber-bank.by/",
     "headers": [
       {
@@ -35,6 +35,13 @@
         "value": "application/json"
       }
     ],
+    "body": ""
+  },
+  {
+    "id": 3,
+    "method": "POST",
+    "url": "https://petstore.swagger.io/v2/pet/galstream1",
+    "bodyReq": "",
     "body": {
       "id": "galstream1",
       "category": {
@@ -55,27 +62,27 @@
     }
   },
   {
-    "method": "GET",
-    "url": "https://petstore.swagger.io/v2/pet/galstream1",
-    "bodyReq": "",
-    "id": "0766df7b-c50f-48b6-8bc5-ea13a3b0ba50"
-  },
-  {
+    "id": 4,
     "method": "GET",
     "url": "888",
-    "bodyReq": "",
-    "id": "2fee734c-faa4-45d5-b5df-8f76fcc9d095"
+    "bodyReq": ""
   },
   {
+    "id": "06761ee5-8213-425e-ad8c-1f297ea14bca",
     "method": "POST",
     "url": "https://petstore.swagger.io/v2/pet/9223372016900065000",
-    "bodyReq": "",
-    "id": "06761ee5-8213-425e-ad8c-1f297ea14bca"
+    "bodyReq": ""
+  },
+  {
+    "id": "a3109cbf-6e44-49d8-9965-739bbe4dfa33",
+    "method": "GET",
+    "url": "https://petstore.swagger.io/v2/pet/106",
+    "bodyReq": ""
   },
   {
     "method": "GET",
-    "url": "https://petstore.swagger.io/v2/pet/106",
+    "url": "8889",
     "bodyReq": "",
-    "id": "a3109cbf-6e44-49d8-9965-739bbe4dfa33"
+    "id": "f23e9757-1f3d-432a-9acc-02d04bf96c78"
   }
 ]

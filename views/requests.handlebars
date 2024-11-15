@@ -1,0 +1,5 @@
+<div>
+  {{#each requests}}
+  <button class="ta-left w100" onclick="setReqCur({{this.id}})">Метод: {{this.method}}<br />{{this.url}}</button>
+  {{/each}}
+</div>

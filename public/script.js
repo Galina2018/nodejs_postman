@@ -7,7 +7,7 @@ async function getReqs() {
       Accept: 'application/json',
     },
   });
-  return await response.json();
+  return await response.json();  
 }
 
 function sendR(data, evt) {
@@ -15,38 +15,35 @@ function sendR(data, evt) {
   console.log('in sendR', data);
 }
 
-function setReqCur(req) {
+async function setReqCur(reqId) {
+  const requests = await getReqs();
+  const reqItem = requests.find(item => item.id === reqId)
   const select = document.getElementById('select');
-  select.options[select.selectedIndex].text = req.method
+  select.value = reqItem.method
   const urlCur = document.getElementById('url');
-  urlCur.value = req.url
+  urlCur.value = reqItem.url
   const bodyCur = document.getElementById('bodyReq')
-  bodyCur.value = req.body ? JSON.stringify(req.body) :''
+  bodyCur.value = reqItem.body ? JSON.stringify(reqItem.body) : ''
 }
 
 async function sendRequest(form) {  
   form.action = '/sendReq'
-  form.method = 'post'
+  form.method = 'POST'
   console.log('form', form)
   form.submit();
-// const r = await fetch('/sendReq',{method:'post'})
-// console.log('rrrr', r)
 }
 
 async function getPage() {
-  const reqsArr = await getReqs();
-  console.log(222, reqsArr);
-  let reqs = document.getElementById('reqs');
-  // let headers = document.getElementById('headers');
-  const arr = await reqsArr;
-  arr.forEach((req) => {
-    if (req.id) {
-      let req_ = JSON.stringify(req)
-      reqs.innerHTML += `<button onclick='setReqCur(${req_})' id="${req.id}" class="ta-left w100">Метод: ${req.method}<br />${
-        req.url
-      }</button>`;
-    }
-  });
+  // let reqs = document.getElementById('reqs');
+  // const arr = await reqsArr;
+  // arr.forEach((req) => {
+  //   if (req.id) {
+  //     let req_ = JSON.stringify(req)
+  //     reqs.innerHTML += `<button onclick='setReqCur(${req_})' id="${req.id}" class="ta-left w100">Метод: ${req.method}<br />${
+  //       req.url
+  //     }</button>`;
+  //   }
+  // });
 
   // const form = document.getElementById('form');
   // form.addEventListener('submit', sendRequest);
