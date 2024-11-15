@@ -7,7 +7,7 @@ async function getReqs() {
       Accept: 'application/json',
     },
   });
-  return await response.json();
+  return await response.json();  
 }
 
 function sendR(data, evt) {
@@ -15,78 +15,35 @@ function sendR(data, evt) {
   console.log('in sendR', data);
 }
 
-function setReqCur(req) {
-  console.log('req', req);
+async function setReqCur(reqId) {
+  const requests = await getReqs();
+  const reqItem = requests.find(item => item.id === reqId)
   const select = document.getElementById('select');
-  select.value = req.method;
+  select.value = reqItem.method
   const urlCur = document.getElementById('url');
-  urlCur.value = req.url;
-  let bodyFormatCur = document.getElementById('bodyReqFormat');
-  bodyFormatCur = req.headers[0].value
-    ? JSON.stringify(req.headers[0].value)
-    : '';
-  const bodyCur = document.getElementById('bodyReq');
-  bodyCur.value = req.body ? JSON.stringify(req.body) : '';
+  urlCur.value = reqItem.url
+  const bodyCur = document.getElementById('bodyReq')
+  bodyCur.value = reqItem.body ? JSON.stringify(reqItem.body) : ''
 }
 
-async function sendRequest() {
-  const select = document.getElementById('select').value;
-  const url = document.getElementById('url').value;
-  const bodyReqFormat = document.getElementById('bodyReqFormat').value;
-  const bodyReq = document.getElementById('bodyReq').value;
-
-  const r = await fetch('/sendReq', {
-    method: 'POST',
-    body: JSON.stringify({
-      url: url,
-      method: select,
-      headers:
-        select === 'POST'
-          ? {
-              'Content-Type': bodyReqFormat,
-            }
-          : {},
-      body: select === 'POST' ? bodyReq : '',
-    }),
-  });
-  console.log('rrrr', r);
-  const bodyRes = {};
-  const headersRes = new Map();
-  // fetch('/sendReq', {
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     method: 'GET',
-  //     url: 'https://jsonplaceholder.typicode.com/users/1',
-  //   }),
-  // }).then((response) => {
-  //   console.log('response***', response.headers.entries());
-  //   for (h of response.headers) {
-  //     console.log(h[0], ':', h[1]);
-  //     headersRes.set(h[0], h[1]);
-  //   }
-  //   console.log('headersRes***', headersRes);
-  //   resultBody.innerText = JSON.stringify(response.body);
-  // });
-
-  const resultBody = document.getElementById('resultBody');
-  resultBody.innerText = JSON.stringify(r.body);
-
-  resultBody.innerText = setTimeout(() => {
-    JSON.stringify(headersRes);
-  }, 10000);
+async function sendRequest(form) {  
+  form.action = '/sendReq'
+  form.method = 'POST'
+  console.log('form', form)
+  form.submit();
 }
 
 async function getPage() {
-  const reqsArr = await getReqs();
-  let reqs = document.getElementById('reqs');
-  // let headers = document.getElementById('headers');
-  const arr = await reqsArr;
-  arr.forEach((req) => {
-    if (req.id) {
-      let req_ = JSON.stringify(req);
-      reqs.innerHTML += `<button onclick='setReqCur(${req_})' id="${req.id}" class="ta-left w100">Метод: ${req.method}<br />${req.url}</button>`;
-    }
-  });
+  // let reqs = document.getElementById('reqs');
+  // const arr = await reqsArr;
+  // arr.forEach((req) => {
+  //   if (req.id) {
+  //     let req_ = JSON.stringify(req)
+  //     reqs.innerHTML += `<button onclick='setReqCur(${req_})' id="${req.id}" class="ta-left w100">Метод: ${req.method}<br />${
+  //       req.url
+  //     }</button>`;
+  //   }
+  // });
 
   // const form = document.getElementById('form');
   // form.addEventListener('submit', sendRequest);

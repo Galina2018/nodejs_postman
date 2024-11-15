@@ -1,24 +1,32 @@
 const express = require('express');
+const {  engine } = require('express-handlebars');
 const path = require('path');
 const fs = require('fs');
+const fsp = require('fs').promises;
 const multer = require('multer');
-const fetch = require('node-fetch');
-const bodyParser = require('body-parser');
-const http = require('http');
+const { randomUUID } = require('crypto');
 
 const webserver = express();
+
+webserver.engine('handlebars', engine());
+webserver.set('view engine', 'handlebars');
+webserver.set('views', path.join(__dirname, 'views'));
+
 const upload = multer();
 const port = 7380;
-// const resultFN = path.resolve(__dirname, 'result.json', 'utf8');
 
 webserver.use(express.urlencoded({ extended: true }));
 webserver.use(express.static(path.resolve(__dirname, 'public')));
-webserver.use(bodyParser.text({}));
-// webserver.use(bodyParser.json({}));
 
-webserver.get('/', (req, res) => {
-  const html = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf8');
-  res.send(html);
+webserver.get('/', async (req, res) => {
+  const reqs = await fsp.readFile(
+    path.resolve(__dirname, './public', 'reqs.json'),
+    'utf8'
+  );
+  res.render('requests', {
+    layout: 'base_layout',
+    requests: JSON.parse(reqs),
+  });
 });
 
 webserver.post('/getReqs', (req, res) => {
@@ -34,12 +42,9 @@ webserver.post('/', upload.none(), (req, res) => {
     path.resolve(__dirname, './public', 'reqs.json'),
     'utf8'
   );
-  console.log('dataJson', dataJson);
   let data = JSON.parse(dataJson);
   if (req.body && req.body.method && req.body.url) {
-    req.body.id = Math.random();
-    req.body.bodyReq = JSON.parse(req.body.bodyReq);
-
+    req.body.id = randomUUID();
     data.push(req.body);
   }
   fs.writeFileSync(
@@ -51,34 +56,15 @@ webserver.post('/', upload.none(), (req, res) => {
 });
 
 webserver.post('/sendReq', async (req, res) => {
-  const body = JSON.parse(req.body);
-  const response = await fetch(body.url, {
-    method: body.method,
-  });
-  const resBody = await response.json();
-  const resHeaders = new Map();
-  for (const header of response.headers) {
-    resHeaders.set(header[0], header[1]);
-  }
-  // res.send({
-  //   status: response.status,
-  //   headers: resHeaders,
-  //   body: resBody,
-  // });
-  console.log(111);
-  let result = '';
-  res.on('data', (chunk) => {
-    console.log(333);
-    result += chunk; // chunk - это Buffer, но при склейке со строкой он автоматом преобразуется к строке
+  const body = req.body;
+  const response = await fetch(`${body.url}`, {
+    method: `${body.method}`,
   });
 
-  res.on('end', () => {
-    // всё загружено
-    console.log('loaded:', JSON.parse(result));
-  });
-  console.log(222);
   res.send({
-    body: resBody,
+    status: response.status,
+    headers: response.headers,
+    body: await response.text(),
   });
 });
 
