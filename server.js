@@ -1,5 +1,6 @@
 const express = require('express');
-const {  engine } = require('express-handlebars');
+const exphbs = require('express-handlebars');
+const fetch = require('isomorphic-fetch');
 const path = require('path');
 const fs = require('fs');
 const fsp = require('fs').promises;
@@ -8,14 +9,15 @@ const { randomUUID } = require('crypto');
 
 const webserver = express();
 
-webserver.engine('handlebars', engine());
+webserver.engine('handlebars', exphbs());
 webserver.set('view engine', 'handlebars');
 webserver.set('views', path.join(__dirname, 'views'));
 
 const upload = multer();
 const port = 7380;
 
-webserver.use(express.urlencoded({ extended: true }));
+webserver.use(express.urlencoded({extended:true}));
+webserver.use(express.json());
 webserver.use(express.static(path.resolve(__dirname, 'public')));
 
 webserver.get('/', async (req, res) => {
@@ -29,6 +31,10 @@ webserver.get('/', async (req, res) => {
   });
 });
 
+// webserver.get('/:id', (req, res) => {
+//   console.log('id', req.params)
+// })
+
 webserver.post('/getReqs', (req, res) => {
   const reqs = fs.readFileSync(
     path.resolve(__dirname, './public', 'reqs.json'),
@@ -36,6 +42,18 @@ webserver.post('/getReqs', (req, res) => {
   );
   res.send(reqs);
 });
+
+webserver.post('/saveReq', upload.none(), (req, res) => {
+  console.log('body saveReq',req.body)
+  res.send('ok')
+})
+
+webserver.post('/saveReqs', (req,res) => {
+  console.log('body',req.body)
+  fs.writeFileSync(path.resolve(__dirname, './public', 'reqs.json'),JSON.stringify(req.body), 'utf8')
+  // res.setHeader("Content-Type", 'application/json');
+  res.send('');
+})
 
 webserver.post('/', upload.none(), (req, res) => {
   let dataJson = fs.readFileSync(
