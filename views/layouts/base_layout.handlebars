@@ -17,7 +17,8 @@
         {{{ body }}}
       </div>
       <div class='column'>
-        <form id="form" method="GET">
+        {{!-- <form id="form" method="GET" > --}}
+        <form id="form">
           <div class='row'>
             <div class='column'>
               <div>Метод</div>
@@ -41,14 +42,15 @@
             <div class='column'>
               <div>Заголовки</div>
               <div id="headers"></div>
-              <input type="button" value="Добавить заголовок"></input>
+              <input type="button" value="Добавить заголовок" onclick="addHeader()"></input>
             </div>
           </div>
+          <input id = "reqId" name="reqId" style="display: none"/>
           <div class='column'>
             <div class='row mt12'>
               <div class='column4'>
-                <input type=button value="Сохранить запрос" onclick="form.method='POST'; form.submit();">
-              </div>
+                <input type=button value="Сохранить запрос" onclick="saveReq(form)">
+              </div>             
               <div class='column4'>
                 <input type=button value="Отправить запрос" onclick="sendRequest(form)">
               </div>
@@ -60,8 +62,8 @@
 
             </div>
           </div>
+        </form>
       </div>
-      </form>
     </div>
   </div>
   </div>
