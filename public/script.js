@@ -11,26 +11,25 @@ async function getReqs() {
 
 async function saveReqs(reqs) {
   console.log('saveReqs()', reqs)
- await fetch('/saveReqs', {
-   method: "POST",
-   headers: {
-    'Content-Type': 'application/json',
-},
-   body: JSON.stringify(reqs)
- })
+  await fetch('/saveReqs', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(reqs)
+  })
 }
 
 async function saveReq(form) {
-  console.log('ffoorrmm', form)
-  await fetch('/saveReq', {
+  console.log('f', form)
+  console.log('f id', form.reqId.value)
+  const formData = new FormData(form);
+  const newReq = await fetch('/saveReq', {
     method: "POST",
-    headers: {
-      // 'Content-Type': 'application/json',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
+    body: formData
   },
-    body: new FormData(form)
-  }, 
-  )
+  );
+  setReqCur(form.reqId.value)
 }
 
 function sendR(data, evt) {
@@ -40,7 +39,7 @@ function sendR(data, evt) {
 
 async function setReqCur(reqId) {
   const requests = await getReqs();
-  const reqItem = requests.find((item) => item.id === reqId);
+  const reqItem = requests.find((item) => item.id == reqId);
   const reqIdTag = document.getElementById('reqId');
   reqIdTag.value = reqId;
   const select = document.getElementById('select');
@@ -51,11 +50,10 @@ async function setReqCur(reqId) {
   bodyCur.value = reqItem.body ? JSON.stringify(reqItem.body) : '';
   let headersTag = document.getElementById('headers');
   headersTag.innerHTML = '';
-  if (reqItem.headers && reqItem.headers.length) {
-    const myHeaders = new Headers(reqItem.headers);
-    myHeaders.forEach((value, key) => {
-      headersTag.innerHTML += `<input id="headerKey" name="headerKey" value='${key}' /><input id="headerValue" name="headerValue" value='${value}' /><button type='button' onclick='deleteHeader({reqId:${reqId},type:"${key}"})'>Удалить</button><br />`;
-    });
+  if (reqItem.headers) {
+    Object.entries(reqItem.headers).forEach(item => {
+      headersTag.innerHTML += `<input name="headerKey" value='${item[0]}' /><input name="headerValue" value='${item[1]}' /><button type='button' onclick='deleteHeader({reqId:${reqId},headerType:"${item[0]}"})'>Удалить</button><br />`;
+    })
   }
 }
 
@@ -67,21 +65,22 @@ async function sendRequest(form) {
   form.submit();
 }
 
-function addHeader() {
+function addHeader({reqId}) {
+  console.log('reqId', reqId)
   let headersTag = document.getElementById('headers');
-  headersTag.innerHTML += `<input name='headerType' /><input name='headerValue' /><button type="button" >Удалить</button><br />`;
+  headersTag.innerHTML += `<input name='headerKey' /><input name='headerValue' /><button type="button" onclick='deleteHeader({reqId:${reqId}})'>Удалить</button><br />`;
 }
-async function deleteHeader({ reqId, type }) {
+
+async function deleteHeader({ reqId, headerType }) {
+
+  console.log(9, reqId, headerType)
   const requests = await getReqs();
-  const reqCurrentIndex = requests.findIndex((item) => item.id === reqId);
+  const reqCurrentIndex = requests.findIndex((item) => item.id == reqId);
+
   if (reqCurrentIndex >= 0) {
     const reqCurrent = requests[reqCurrentIndex];
-    const headerForDelIndex = reqCurrent.headers.findIndex(
-      (e) => e[0].toLowerCase() == type
-    );
-    requests[reqCurrentIndex].headers.splice(headerForDelIndex, 1);
-    console.log(200, requests);
+    delete reqCurrent.headers[headerType]
+  }
     await saveReqs(requests);
     setReqCur(reqId)
-  }
 }

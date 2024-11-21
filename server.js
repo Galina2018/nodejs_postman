@@ -16,7 +16,7 @@ webserver.set('views', path.join(__dirname, 'views'));
 const upload = multer();
 const port = 7380;
 
-webserver.use(express.urlencoded({extended:true}));
+webserver.use(express.urlencoded({ extended: true }));
 webserver.use(express.json());
 webserver.use(express.static(path.resolve(__dirname, 'public')));
 
@@ -44,14 +44,29 @@ webserver.post('/getReqs', (req, res) => {
 });
 
 webserver.post('/saveReq', upload.none(), (req, res) => {
-  console.log('body saveReq',req.body)
+  req.body.headers = {}
+  if (req.body.headerKey && req.body.headerValue) {
+    if (Array.isArray(req.body.headerKey) && Array.isArray(req.body.headerValue)) {
+      req.body.headerKey.forEach((el, idx) => {
+        req.body.headers[el] = req.body.headerValue[idx]
+      });
+    } else req.body.headers[req.body.headerKey] = req.body.headerValue
+  }
+  delete req.body.headerKey
+  delete req.body.headerValue
+  const reqs = fs.readFileSync(path.resolve(__dirname, './public', 'reqs.json'), 'utf8')
+  let reqsArr = JSON.parse(reqs);
+  const reqCurrentIndex = reqsArr.findIndex(e => e.id == req.body.reqId)
+  req.body.id = req.body.reqId;
+  delete req.body.reqId
+  reqsArr.splice(reqCurrentIndex, 1, req.body);
+  fs.writeFileSync(path.resolve(__dirname, './public', 'reqs.json'), JSON.stringify(reqsArr), 'utf8')
   res.send('ok')
 })
 
-webserver.post('/saveReqs', (req,res) => {
-  console.log('body',req.body)
-  fs.writeFileSync(path.resolve(__dirname, './public', 'reqs.json'),JSON.stringify(req.body), 'utf8')
-  // res.setHeader("Content-Type", 'application/json');
+webserver.post('/saveReqs', (req, res) => {
+  console.log('body', req.body)
+  fs.writeFileSync(path.resolve(__dirname, './public', 'reqs.json'), JSON.stringify(req.body), 'utf8')
   res.send('');
 })
 
