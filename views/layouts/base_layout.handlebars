@@ -18,7 +18,7 @@
       </div>
       <div class='column'>
         {{!-- <form id="form" method="GET" > --}}
-        <form id="form">
+        <form id="form" method="POST" action="/">
           <div class='row'>
             <div class='column'>
               <div>Метод</div>
@@ -42,10 +42,10 @@
             <div class='column'>
               <div>Заголовки</div>
               <div id="headers"></div>
-              <input type="button" value="Добавить заголовок" onclick="addHeader()"></input>
+              <input type="button" value="Добавить заголовок" onclick="addHeader({reqId:reqId.value})"></input>
             </div>
           </div>
-          <input id = "reqId" name="reqId" style="display: none"/>
+          <input id="reqId" name="reqId" style="display: none"/>
           <div class='column'>
             <div class='row mt12'>
               <div class='column4'>
