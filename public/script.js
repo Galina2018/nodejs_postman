@@ -10,7 +10,6 @@ async function getReqs() {
 }
 
 async function saveReqs(reqs) {
-  console.log('saveReqs()', reqs)
   await fetch('/saveReqs', {
     method: "POST",
     headers: {
@@ -21,8 +20,6 @@ async function saveReqs(reqs) {
 }
 
 async function saveReq(form) {
-  console.log('f', form)
-  console.log('f id', form.reqId.value)
   const formData = new FormData(form);
   const newReq = await fetch('/saveReq', {
     method: "POST",
@@ -30,11 +27,6 @@ async function saveReq(form) {
   },
   );
   setReqCur(form.reqId.value)
-}
-
-function sendR(data, evt) {
-  evt.preventDefault();
-  console.log('in sendR', data);
 }
 
 async function setReqCur(reqId) {
@@ -55,32 +47,38 @@ async function setReqCur(reqId) {
       headersTag.innerHTML += `<input name="headerKey" value='${item[0]}' /><input name="headerValue" value='${item[1]}' /><button type='button' onclick='deleteHeader({reqId:${reqId},headerType:"${item[0]}"})'>Удалить</button><br />`;
     })
   }
+  const response = document.getElementById('response');
+  response.innerHTML = '';
+  const resbody = document.getElementById('resbody');
+  resbody.innerHTML = '';
 }
 
 
 async function sendRequest(form) {
-  form.action = '/sendReq';
-  form.method = 'POST';
-  console.log('form', form);
-  form.submit();
+  const response = await fetch('/sendReq', {
+    method: "POST",
+    body: new FormData(form)
+  })
+  console.log(123, response)
+  const res = document.getElementById('response');
+  const resbody = document.getElementById('resbody');
+  res.innerHTML = 'Status: ' + response.status + '<br />';
+  res.innerHTML += 'Headers: ' + response.headers + '<br />';
+  resbody.innerHTML += 'Body: ' + response.body;
 }
 
-function addHeader({reqId}) {
-  console.log('reqId', reqId)
+function addHeader({ reqId }) {
   let headersTag = document.getElementById('headers');
   headersTag.innerHTML += `<input name='headerKey' /><input name='headerValue' /><button type="button" onclick='deleteHeader({reqId:${reqId}})'>Удалить</button><br />`;
 }
 
 async function deleteHeader({ reqId, headerType }) {
-
-  console.log(9, reqId, headerType)
   const requests = await getReqs();
   const reqCurrentIndex = requests.findIndex((item) => item.id == reqId);
-
   if (reqCurrentIndex >= 0) {
     const reqCurrent = requests[reqCurrentIndex];
     delete reqCurrent.headers[headerType]
   }
-    await saveReqs(requests);
-    setReqCur(reqId)
+  await saveReqs(requests);
+  setReqCur(reqId)
 }

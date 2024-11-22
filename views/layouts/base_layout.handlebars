@@ -17,55 +17,53 @@
         {{{ body }}}
       </div>
       <div class='column'>
-        {{!-- <form id="form" method="GET" > --}}
-        <form id="form" method="POST" action="/">
-          <div class='row'>
-            <div class='column'>
-              <div>Метод</div>
-              <select name="method" id="select">
-                <option value="GET">GET</option>
-                <option value="POST">POST</option>
-              </select>
-            </div>
-            <div class='column column5'>
-              <div>URL</div>
-              <input id="url" name="url" type="text" />
-            </div>
-          </div>
-          <div class='row'>
-            <div class='column'>
-              <div>Тело запроса</div>
-              <textarea id="bodyReq" name="bodyReq"></textarea>
-            </div>
-          </div>
-          <div class='row'>
-            <div class='column'>
-              <div>Заголовки</div>
-              <div id="headers"></div>
-              <input type="button" value="Добавить заголовок" onclick="addHeader({reqId:reqId.value})"></input>
-            </div>
-          </div>
-          <input id="reqId" name="reqId" style="display: none"/>
-          <div class='column'>
-            <div class='row mt12'>
-              <div class='column4'>
-                <input type=button value="Сохранить запрос" onclick="saveReq(form)">
-              </div>             
-              <div class='column4'>
-                <input type=button value="Отправить запрос" onclick="sendRequest(form)">
+        {{!-- <form id="form" method="GET"> --}}
+          <form id="form" method="POST" action="/">
+            <div class='row'>
+              <div class='column'>
+                <div>Метод</div>
+                <select name="method" id="select">
+                  <option value="GET">GET</option>
+                  <option value="POST">POST</option>
+                </select>
               </div>
-              <div class='column4'>
-                <input type=button value="Очистить форму" onclick="form.reset()">
+              <div class='column column5'>
+                <div>URL</div>
+                <input id="url" name="url" type="text" />
               </div>
             </div>
-            <div class='row mt12 response'>
-
+            <div class='row'>
+              <div class='column'>
+                <div>Тело запроса</div>
+                <textarea id="bodyReq" name="bodyReq"></textarea>
+              </div>
             </div>
-          </div>
-        </form>
+            <div class='row'>
+              <div class='column'>
+                <div>Заголовки</div>
+                <div id="headers"></div>
+                <input type="button" value="Добавить заголовок" onclick="addHeader({reqId:reqId.value})"></input>
+              </div>
+            </div>
+            <input id="reqId" name="reqId" style="display: none" />
+            <div class='column'>
+              <div class='row mt12'>
+                <div class='column4'>
+                  <input type=button value="Сохранить запрос" onclick="saveReq(form)">
+                </div>
+                <div class='column4'>
+                  <input type=button value="Отправить запрос" onclick="sendRequest(form)">
+                </div>
+                <div class='column4'>
+                  <input type=button value="Очистить форму" onclick="form.reset()">
+                </div>
+              </div>
+              <div id='response' class='row mt12 response'></div>
+              <div id='resbody' class='row mt12 response'></div>
+            </div>
+          </form>
       </div>
     </div>
-  </div>
   </div>
 </body>
 
