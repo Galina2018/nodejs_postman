@@ -21,7 +21,7 @@ async function saveReqs(reqs) {
 
 async function saveReq(form) {
   const formData = new FormData(form);
-  const newReq = await fetch('/saveReq', {
+  await fetch('/saveReq', {
     method: "POST",
     body: formData
   },
@@ -47,9 +47,11 @@ async function setReqCur(reqId) {
       headersTag.innerHTML += `<input name="headerKey" value='${item[0]}' /><input name="headerValue" value='${item[1]}' /><button type='button' onclick='deleteHeader({reqId:${reqId},headerType:"${item[0]}"})'>Удалить</button><br />`;
     })
   }
-  const response = document.getElementById('response');
-  response.innerHTML = '';
-  const resbody = document.getElementById('resbody');
+  const resStatus = document.getElementById('resStatus');
+  resStatus.innerHTML = '';
+  const resHeaders = document.getElementById('resHeaders');
+  resHeaders.innerHTML = '';
+  const resbody = document.getElementById('resBody');
   resbody.innerHTML = '';
 }
 
@@ -59,12 +61,19 @@ async function sendRequest(form) {
     method: "POST",
     body: new FormData(form)
   })
-  console.log(123, response)
-  const res = document.getElementById('response');
-  const resbody = document.getElementById('resbody');
-  res.innerHTML = 'Status: ' + response.status + '<br />';
-  res.innerHTML += 'Headers: ' + response.headers + '<br />';
-  resbody.innerHTML += 'Body: ' + response.body;
+  const result = await response.text();
+  console.log('result', result)
+  const resStatus = document.getElementById('resStatus');
+  const resHeaders = document.getElementById('resHeaders');
+  const resBody = document.getElementById('resBody');
+  resStatus.innerText = JSON.parse(result).status;
+  const startHeaders = result.indexOf('headers') + 9;
+  const startBody = result.indexOf('body');
+  resHeaders.innerText = result.slice(startHeaders, startBody-2);
+  resBody.innerText = result.slice(startBody+6);
+  // const previewBody = document.getElementById('previewBody');
+  // if (result.slice(startBody+6).includes('html')) 
+  // previewBody.innerHTML = result.slice(startBody+6)
 }
 
 function addHeader({ reqId }) {

@@ -54,6 +54,10 @@
 }
 
 .response {
+  min-height: 40px;
+  border: solid gray 1px;
+}
+.resbody {
   min-height: 100px;
   border: solid gray 1px;
 }

@@ -58,8 +58,13 @@
                   <input type=button value="Очистить форму" onclick="form.reset()">
                 </div>
               </div>
-              <div id='response' class='row mt12 response'></div>
-              <div id='resbody' class='row mt12 response'></div>
+              <h3>Response</h3>
+              Status:
+              <div id='resStatus' class='row mt12 mb12 response'></div>
+              Headers:
+              <div id='resHeaders' class='row mt12 mb12 response'></div>
+              Body: <div id='resBody' class='row mt12 resbody'></div>
+              {{!-- Preview: <div id='previewBody' class='row mt12 resbody'></div> --}}
             </div>
           </form>
       </div>

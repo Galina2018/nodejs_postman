@@ -92,8 +92,7 @@ webserver.post('/sendReq', upload.none(), async (req, res) => {
   const response = await fetch(`${body.url}`, {
     method: `${body.method}`,
   });
-  console.log(333,  response.status)
-
+  console.log('response.headers', response.headers)
   res.send({
     status: response.status,
     headers: response.headers,
