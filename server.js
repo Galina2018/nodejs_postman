@@ -65,7 +65,6 @@ webserver.post('/saveReq', upload.none(), (req, res) => {
 })
 
 webserver.post('/saveReqs', (req, res) => {
-  console.log('body', req.body)
   fs.writeFileSync(path.resolve(__dirname, './public', 'reqs.json'), JSON.stringify(req.body), 'utf8')
   res.send('');
 })
@@ -88,11 +87,12 @@ webserver.post('/', upload.none(), (req, res) => {
   res.redirect('/');
 });
 
-webserver.post('/sendReq', async (req, res) => {
+webserver.post('/sendReq', upload.none(), async (req, res) => {
   const body = req.body;
   const response = await fetch(`${body.url}`, {
     method: `${body.method}`,
   });
+  console.log(333,  response.status)
 
   res.send({
     status: response.status,
