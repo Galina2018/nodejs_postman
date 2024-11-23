@@ -40,6 +40,13 @@ async function setReqCur(reqId) {
   urlCur.value = reqItem.url;
   const bodyCur = document.getElementById('bodyReq');
   bodyCur.value = reqItem.body ? JSON.stringify(reqItem.body) : '';
+  let paramsTag = document.getElementById('params');
+  paramsTag.innerHTML = '';
+  if (reqItem.headers) {
+    Object.entries(reqItem.params).forEach(item => {
+      paramsTag.innerHTML += `<input name="paramKey" value='${item[0]}' /><input name="paramValue" value='${item[1]}' /><button type='button' onclick='deleteParam({reqId:${reqId},paramKey:"${item[0]}"})'>Удалить</button><br />`;
+    })
+  }
   let headersTag = document.getElementById('headers');
   headersTag.innerHTML = '';
   if (reqItem.headers) {
@@ -94,8 +101,26 @@ async function deleteHeader({ reqId, headerType }) {
   setReqCur(reqId)
 }
 
+function addParam({ reqId }) {
+  let headersTag = document.getElementById('params');
+  headersTag.innerHTML += `<input name='paramKey' /><input name='paramValue' /><button type="button" onclick='deleteParam({reqId:${reqId}})'>Удалить</button><br />`;
+}
+
+async function deleteParam({ reqId, paramKey }) {
+  const requests = await getReqs();
+  const reqCurrentIndex = requests.findIndex((item) => item.id == reqId);
+  if (reqCurrentIndex >= 0) {
+    const reqCurrent = requests[reqCurrentIndex];
+    delete reqCurrent.params[paramKey]
+  }
+  await saveReqs(requests);
+  setReqCur(reqId)
+}
+
 function clearForm(form) {
   form.reset();
+  let paramsTag = document.getElementById('params');
+  paramsTag.innerHTML = '';
   let headersTag = document.getElementById('headers');
   headersTag.innerHTML = '';
 }

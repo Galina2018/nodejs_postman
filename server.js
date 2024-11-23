@@ -31,10 +31,6 @@ webserver.get('/', async (req, res) => {
   });
 });
 
-// webserver.get('/:id', (req, res) => {
-//   console.log('id', req.params)
-// })
-
 webserver.post('/getReqs', (req, res) => {
   const reqs = fs.readFileSync(
     path.resolve(__dirname, './public', 'reqs.json'),
@@ -44,6 +40,16 @@ webserver.post('/getReqs', (req, res) => {
 });
 
 webserver.post('/saveReq', upload.none(), (req, res) => {
+  req.body.params = {}
+  if (req.body.paramKey && req.body.paramValue) {
+    if (Array.isArray(req.body.paramKey) && Array.isArray(req.body.paramValue)) {
+      req.body.paramKey.forEach((el, idx) => {
+        req.body.params[el] = req.body.paramValue[idx]
+      });
+    } else req.body.params[req.body.paramKey] = req.body.paramValue
+  }
+  delete req.body.paramKey
+  delete req.body.paramValue
   req.body.headers = {}
   if (req.body.headerKey && req.body.headerValue) {
     if (Array.isArray(req.body.headerKey) && Array.isArray(req.body.headerValue)) {
@@ -57,9 +63,15 @@ webserver.post('/saveReq', upload.none(), (req, res) => {
   const reqs = fs.readFileSync(path.resolve(__dirname, './public', 'reqs.json'), 'utf8')
   let reqsArr = JSON.parse(reqs);
   const reqCurrentIndex = reqsArr.findIndex(e => e.id == req.body.reqId)
-  req.body.id = req.body.reqId;
-  delete req.body.reqId
-  reqsArr.splice(reqCurrentIndex, 1, req.body);
+  if (reqCurrentIndex >= 0) {
+    req.body.id = req.body.reqId;
+    delete req.body.reqId
+    reqsArr.splice(reqCurrentIndex, 1, req.body);
+  } else {
+    req.body.id = +reqsArr.slice(-1)[0].id + 1
+    delete req.body.reqId
+    reqsArr.push(req.body)
+  }
   fs.writeFileSync(path.resolve(__dirname, './public', 'reqs.json'), JSON.stringify(reqsArr), 'utf8')
   res.send('ok')
 })
@@ -101,7 +113,8 @@ webserver.post('/sendReq', upload.none(), async (req, res) => {
   delete body.headerValue
   const response = await fetch(`${body.url}`, {
     method: `${body.method}`,
-    headers: headers
+    headers: headers,
+    redirect: 'manual'
   });
   res.send({
     status: response.status,
