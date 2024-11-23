@@ -93,3 +93,9 @@ async function deleteHeader({ reqId, headerType }) {
   await saveReqs(requests);
   setReqCur(reqId)
 }
+
+function clearForm(form) {
+  form.reset();
+  let headersTag = document.getElementById('headers');
+  headersTag.innerHTML = '';
+}
