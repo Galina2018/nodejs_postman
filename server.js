@@ -94,7 +94,7 @@ webserver.post('/sendReq', upload.none(), async (req, res) => {
   });
   res.send({
     status: response.status,
-    headers: response.headers,
+    headers: response.headers.raw(),
     body: await response.text(),
   });
 });
