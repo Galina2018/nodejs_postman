@@ -62,15 +62,17 @@ async function sendRequest(form) {
     body: new FormData(form)
   })
   const result = await response.text();
-  console.log('result', result)
   const resStatus = document.getElementById('resStatus');
   const resHeaders = document.getElementById('resHeaders');
   const resBody = document.getElementById('resBody');
   resStatus.innerText = JSON.parse(result).status;
   const startHeaders = result.indexOf('headers') + 9;
   const startBody = result.indexOf('body');
-  resHeaders.innerText = result.slice(startHeaders, startBody-2);
-  resBody.innerText = result.slice(startBody+6);
+  const resultHeaders = result.slice(startHeaders, startBody - 2)
+  for (let el in JSON.parse(resultHeaders)) {
+    resHeaders.innerHTML += el + ': ' + JSON.parse(resultHeaders)[el] + '<br />'
+  }
+  resBody.innerText = result.slice(startBody + 6);
   // const previewBody = document.getElementById('previewBody');
   // if (result.slice(startBody+6).includes('html')) 
   // previewBody.innerHTML = result.slice(startBody+6)
