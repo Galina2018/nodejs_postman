@@ -89,8 +89,19 @@ webserver.post('/', upload.none(), (req, res) => {
 
 webserver.post('/sendReq', upload.none(), async (req, res) => {
   const body = req.body;
+  let headers = {};
+  if (body.headerKey && body.headerValue) {
+    if (Array.isArray(body.headerKey) && Array.isArray(body.headerValue)) {
+      body.headerKey.forEach((el, idx) => {
+        headers[el] = body.headerValue[idx]
+      });
+    } else headers[body.headerKey] = body.headerValue;
+  }
+  delete body.headerKey
+  delete body.headerValue
   const response = await fetch(`${body.url}`, {
     method: `${body.method}`,
+    headers: headers
   });
   res.send({
     status: response.status,
