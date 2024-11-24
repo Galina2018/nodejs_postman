@@ -40,6 +40,13 @@ async function setReqCur(reqId) {
   urlCur.value = reqItem.url;
   const bodyCur = document.getElementById('bodyReq');
   bodyCur.value = reqItem.body ? JSON.stringify(reqItem.body) : '';
+  let paramsTag = document.getElementById('params');
+  paramsTag.innerHTML = '';
+  if (reqItem.headers) {
+    Object.entries(reqItem.params).forEach(item => {
+      paramsTag.innerHTML += `<input name="paramKey" value='${item[0]}' /><input name="paramValue" value='${item[1]}' /><button type='button' onclick='deleteParam({reqId:${reqId},paramKey:"${item[0]}"})'>Удалить</button><br />`;
+    })
+  }
   let headersTag = document.getElementById('headers');
   headersTag.innerHTML = '';
   if (reqItem.headers) {
@@ -53,6 +60,8 @@ async function setReqCur(reqId) {
   resHeaders.innerHTML = '';
   const resbody = document.getElementById('resBody');
   resbody.innerHTML = '';
+  const previewBody = document.getElementById('previewBody');
+  previewBody.innerHTML = '';
 }
 
 
@@ -66,16 +75,20 @@ async function sendRequest(form) {
   const resHeaders = document.getElementById('resHeaders');
   const resBody = document.getElementById('resBody');
   resStatus.innerText = JSON.parse(result).status;
-  const startHeaders = result.indexOf('headers') + 9;
-  const startBody = result.indexOf('body');
-  const resultHeaders = result.slice(startHeaders, startBody - 2)
-  for (let el in JSON.parse(resultHeaders)) {
-    resHeaders.innerHTML += el + ': ' + JSON.parse(resultHeaders)[el] + '<br />'
+  const resultHeaders = JSON.parse(result).headers
+  for (let el in resultHeaders) {
+    resHeaders.innerHTML += el + ': ' + resultHeaders[el] + '<br />'
   }
-  resBody.innerText = result.slice(startBody + 6);
-  // const previewBody = document.getElementById('previewBody');
-  // if (result.slice(startBody+6).includes('html')) 
-  // previewBody.innerHTML = result.slice(startBody+6)
+  resBody.innerText = JSON.parse(result).body;
+  const previewBody = document.getElementById('previewBody');
+  const contentType = resultHeaders['content-type']
+  if (contentType[0].includes('text/html')) {
+    previewBody.innerHTML = JSON.parse(result).body;
+  }
+  if (contentType[0].includes('application/json')) {
+    const bodyObj = JSON.parse(JSON.parse(result).body)
+    previewBody.innerHTML = `<pre>${JSON.stringify(bodyObj, undefined, '\t')}</pre>`
+  }
 }
 
 function addHeader({ reqId }) {
@@ -92,4 +105,28 @@ async function deleteHeader({ reqId, headerType }) {
   }
   await saveReqs(requests);
   setReqCur(reqId)
+}
+
+function addParam({ reqId }) {
+  let headersTag = document.getElementById('params');
+  headersTag.innerHTML += `<input name='paramKey' /><input name='paramValue' /><button type="button" onclick='deleteParam({reqId:${reqId}})'>Удалить</button><br />`;
+}
+
+async function deleteParam({ reqId, paramKey }) {
+  const requests = await getReqs();
+  const reqCurrentIndex = requests.findIndex((item) => item.id == reqId);
+  if (reqCurrentIndex >= 0) {
+    const reqCurrent = requests[reqCurrentIndex];
+    delete reqCurrent.params[paramKey]
+  }
+  await saveReqs(requests);
+  setReqCur(reqId)
+}
+
+function clearForm(form) {
+  form.reset();
+  let paramsTag = document.getElementById('params');
+  paramsTag.innerHTML = '';
+  let headersTag = document.getElementById('headers');
+  headersTag.innerHTML = '';
 }
