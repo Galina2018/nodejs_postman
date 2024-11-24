@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const fsp = require('fs').promises;
 const multer = require('multer');
-const { randomUUID } = require('crypto');
+// const { randomUUID } = require('crypto');
 
 const webserver = express();
 
@@ -87,10 +87,10 @@ webserver.post('/', upload.none(), (req, res) => {
     'utf8'
   );
   let data = JSON.parse(dataJson);
-  if (req.body && req.body.method && req.body.url) {
-    req.body.id = randomUUID();
-    data.push(req.body);
-  }
+  // if (req.body && req.body.method && req.body.url) {
+    // req.body.id = randomUUID();
+    // data.push(req.body);
+  // }
   fs.writeFileSync(
     path.resolve(__dirname, './public', 'reqs.json'),
     JSON.stringify(data),

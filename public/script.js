@@ -26,7 +26,7 @@ async function saveReq(form) {
     body: formData
   },
   );
-  setReqCur(form.reqId.value)
+  form.submit();
 }
 
 async function setReqCur(reqId) {
@@ -91,6 +91,10 @@ async function sendRequest(form) {
   if (contentType[0].includes('application/json')) {
     const bodyObj = JSON.parse(JSON.parse(result).body)
     previewBody.innerHTML = `<pre>${JSON.stringify(bodyObj, undefined, '\t')}</pre>`
+  }
+  if (contentType[0].includes('image/png')) {
+    const urlImg = Object.fromEntries(new FormData(form).entries()).url
+    previewBody.innerHTML = `<img src=${urlImg} />`
   }
 }
 
