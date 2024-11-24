@@ -60,6 +60,8 @@ async function setReqCur(reqId) {
   resHeaders.innerHTML = '';
   const resbody = document.getElementById('resBody');
   resbody.innerHTML = '';
+  const previewBody = document.getElementById('previewBody');
+  previewBody.innerHTML = '';
 }
 
 
@@ -73,16 +75,20 @@ async function sendRequest(form) {
   const resHeaders = document.getElementById('resHeaders');
   const resBody = document.getElementById('resBody');
   resStatus.innerText = JSON.parse(result).status;
-  const startHeaders = result.indexOf('headers') + 9;
-  const startBody = result.indexOf('body');
-  const resultHeaders = result.slice(startHeaders, startBody - 2)
-  for (let el in JSON.parse(resultHeaders)) {
-    resHeaders.innerHTML += el + ': ' + JSON.parse(resultHeaders)[el] + '<br />'
+  const resultHeaders = JSON.parse(result).headers
+  for (let el in resultHeaders) {
+    resHeaders.innerHTML += el + ': ' + resultHeaders[el] + '<br />'
   }
-  resBody.innerText = result.slice(startBody + 6);
-  // const previewBody = document.getElementById('previewBody');
-  // if (result.slice(startBody+6).includes('html')) 
-  // previewBody.innerHTML = result.slice(startBody+6)
+  resBody.innerText = JSON.parse(result).body;
+  const previewBody = document.getElementById('previewBody');
+  const contentType = resultHeaders['content-type']
+  if (contentType[0].includes('text/html')) {
+    previewBody.innerHTML = JSON.parse(result).body;
+  }
+  if (contentType[0].includes('application/json')) {
+    const bodyObj = JSON.parse(JSON.parse(result).body)
+    previewBody.innerHTML = `<pre>${JSON.stringify(bodyObj, undefined, '\t')}</pre>`
+  }
 }
 
 function addHeader({ reqId }) {

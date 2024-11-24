@@ -101,6 +101,24 @@ webserver.post('/', upload.none(), (req, res) => {
 
 webserver.post('/sendReq', upload.none(), async (req, res) => {
   const body = req.body;
+  let params = {};
+  if (body.paramKey && body.paramValue) {
+    if (Array.isArray(body.paramKey) && Array.isArray(body.paramValue)) {
+      body.paramKey.forEach((el, idx) => {
+        params[el] = body.paramValue[idx]
+      });
+    } else params[body.paramKey] = body.paramValue;
+  }
+  delete body.paramKey
+  delete body.paramValue
+  if (Object.entries(params).length)
+    Object.entries(params).forEach((e, i) => {
+      if (i === 0) {
+        body.url += `?${e[0]}=${e[1]}`
+      } else {
+        body.url += `&${e[0]}=${e[1]}`
+      }
+    })
   let headers = {};
   if (body.headerKey && body.headerValue) {
     if (Array.isArray(body.headerKey) && Array.isArray(body.headerValue)) {
