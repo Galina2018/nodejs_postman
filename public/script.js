@@ -84,6 +84,7 @@ async function sendRequest(form) {
   const contentType = resultHeaders['content-type']
   console.log('resultHeaders',resultHeaders)
   console.log('contentType',contentType)
+  console.log('contentType[0]',contentType[0])
   if (contentType[0].includes('text/html')) {
     previewBody.innerHTML = JSON.parse(result).body;
   }
