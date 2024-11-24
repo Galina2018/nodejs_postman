@@ -82,6 +82,8 @@ async function sendRequest(form) {
   resBody.innerText = JSON.parse(result).body;
   const previewBody = document.getElementById('previewBody');
   const contentType = resultHeaders['content-type']
+  console.log('resultHeaders',resultHeaders)
+  console.log('contentType',contentType)
   if (contentType[0].includes('text/html')) {
     previewBody.innerHTML = JSON.parse(result).body;
   }
